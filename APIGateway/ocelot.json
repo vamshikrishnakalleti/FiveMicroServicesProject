@@ -1,0 +1,89 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/catalog",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2933
+        }
+      ],
+      "Key": "Catalog",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SecretKey101"
+      },
+      "RouteClaimsRequirement": {
+        "Roles": "User"
+        //"Roles":  "User,SubAdmin" 
+      },
+      "UpstreamPathTemplate": "/catalog",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "Delete" ],
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "catalog"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/authentication/getusers",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 12004
+        }
+      ],
+      "Key": "Auth",
+      "UpstreamPathTemplate": "/authentication",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/authentication/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 12004
+        }
+      ],
+      "UpstreamPathTemplate": "/authentication/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/log",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 37639
+        }
+      ],
+      "UpstreamPathTemplate": "/log",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "Catalog",
+        "Auth"
+      ],
+      "UpstreamPathTemplate": "/user-catalog"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:36090",
+    "RateLimitOptions": {
+      "DisableRateLimitHeaders": false,
+      "QuotaExceededMessage": "Request Quota Excceded",
+      "HttpStatusCode": 999
+    }
+  }
+}
