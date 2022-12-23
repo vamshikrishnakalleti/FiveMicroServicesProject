@@ -6,8 +6,8 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Apigateway/APIGateway.csproj", "Apigateway/"]
-RUN dotnet restore "Apigateway/APIGateway.csproj"
+COPY ["ApiGateway/APIGateway.csproj", "ApiGateway/"]
+RUN dotnet restore "ApiGateway/APIGateway.csproj"
 COPY . .
 WORKDIR "/src/Apigateway"
 RUN dotnet build "APIGateway.csproj" -c Release -o /app/build
